@@ -4,7 +4,6 @@ import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
-import android.util.Log
 import com.strish.android.testproject.api.NewsApiService
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -59,7 +58,6 @@ class ArticleViewModel(application: Application) : AndroidViewModel(application)
         } else {
             sortBy = "publishedAt"
         }
-        Log.d("Test", "pageNum " + pageNum + "   from " + dateFrom.toString() + "    to " + dateTo.toString())
         apiService.newArticles(pageNum, sortBy, sdf.format(dateFrom), sdf.format(dateTo))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
