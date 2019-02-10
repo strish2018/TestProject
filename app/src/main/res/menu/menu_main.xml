@@ -1,0 +1,41 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_sortBy"
+        android:title="@string/action_sort_by"
+        app:showAsAction="never" >
+
+        <menu>
+            <item
+                android:id="@+id/action_sortBy_popularity"
+                android:title="@string/action_sort_by_popularity"
+                app:showAsAction="never" />
+
+            <item
+                android:id="@+id/action_sortBy_time"
+                android:title="@string/action_sort_by_time"
+                app:showAsAction="never" />
+        </menu>
+
+    </item>
+
+    <item
+        android:id="@+id/action_filterByTime"
+        android:title="@string/action_filter_by_time"
+        app:showAsAction="never" >
+
+        <menu>
+            <item
+                android:id="@+id/action_filterByTime_from"
+                android:title="@string/action_filter_by_time_from"
+                app:showAsAction="never" />
+
+            <item
+                android:id="@+id/action_filterByTime_to"
+                android:title="@string/action_filter_by_time_to"
+                app:showAsAction="never" />
+        </menu>
+
+    </item>
+
+</menu>

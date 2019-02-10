@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">TestProject</string>
+    <string name="tab_text_1">All articles</string>
+    <string name="tab_text_2">Favorites</string>
+    <string name="action_sort_by">Sort by</string>
+    <string name="action_sort_by_popularity">Popularity</string>
+    <string name="action_sort_by_time">Time</string>
+    <string name="action_filter_by_time">Time filter</string>
+    <string name="action_filter_by_time_from">From</string>
+    <string name="action_filter_by_time_to">To</string>
+    <string name="from_date">From date:</string>
+    <string name="to_date">To date:</string>
+    <string name="no_data_available">No matches found</string>
+    <string name="title_test">Title</string>
+    <string name="author_test">Author</string>
+    <string name="abstract_test">Abstract</string>
+    <string name="date_test">Date</string>
+</resources>
