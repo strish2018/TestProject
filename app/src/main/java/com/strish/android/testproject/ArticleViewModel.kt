@@ -15,7 +15,8 @@ class ArticleViewModel(application: Application) : AndroidViewModel(application)
     var resetAdapter: Boolean = false
     private var sortByPopularity: Boolean = true
     private val repository: ArticleRepository = ArticleRepository(application)
-    private var favoriteArticles: LiveData<List<Article>>? = null
+    var favoriteArticles: LiveData<List<Article>>? = null
+    var openActivityLiveData: MutableLiveData<Article>? = MutableLiveData()
 
     var dateFrom: Date = Date()
         private set
@@ -91,8 +92,8 @@ class ArticleViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
-    fun getFavoriteArticles(): LiveData<List<Article>> {
-        return favoriteArticles!!
+    fun articleClicked(article: Article?) {
+        openActivityLiveData?.value = article
     }
 
     fun sortByPopularityClicked() {

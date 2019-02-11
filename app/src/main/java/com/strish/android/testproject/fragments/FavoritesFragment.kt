@@ -12,10 +12,8 @@ import android.view.ViewGroup
 import com.strish.android.testproject.Article
 import com.strish.android.testproject.ArticleViewModel
 import com.strish.android.testproject.R
-import com.strish.android.testproject.activity.ArticleActivity
 import com.strish.android.testproject.activity.MainActivity
 import com.strish.android.testproject.adapters.FavoritesAdapter
-import maes.tech.intentanim.CustomIntent
 
 class FavoritesFragment : Fragment(), FavoritesAdapter.OnItemClickedListener {
 
@@ -41,7 +39,7 @@ class FavoritesFragment : Fragment(), FavoritesAdapter.OnItemClickedListener {
         mRecyclerView?.adapter = mAdapter
         mAdapter?.setOnItemClickedListener(this)
 
-        mArticleViewModel?.getFavoriteArticles()?.observe(this, Observer<List<Article>> { articles ->
+        mArticleViewModel?.favoriteArticles?.observe(this, Observer<List<Article>> { articles ->
             mAdapter?.submitList(articles)
         })
 
@@ -49,10 +47,7 @@ class FavoritesFragment : Fragment(), FavoritesAdapter.OnItemClickedListener {
     }
 
     override fun onItemClicked(article: Article?) {
-        val intent = Intent(activity, ArticleActivity::class.java)
-        intent.putExtra(ArticleActivity.ARGS_ARTICLE, article)
-        startActivity(intent)
-        CustomIntent.customType(activity, "fadein-to-fadeout")
+        mArticleViewModel?.articleClicked(article)
     }
 
     override fun onFavoriteButtonClicked(article: Article?) {

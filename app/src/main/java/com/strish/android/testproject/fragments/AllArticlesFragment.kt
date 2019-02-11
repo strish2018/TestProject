@@ -9,10 +9,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.*
 import android.widget.TextView
 import com.strish.android.testproject.*
-import com.strish.android.testproject.activity.ArticleActivity
 import com.strish.android.testproject.activity.MainActivity
 import com.strish.android.testproject.adapters.ArticlesAdapter
-import maes.tech.intentanim.CustomIntent
 import java.util.*
 
 class AllArticlesFragment : Fragment(), DateDialog.DateDialogListener, ArticlesAdapter.OnItemClickedListener, ArticleViewModel.OnListUpdatedListener {
@@ -119,10 +117,7 @@ class AllArticlesFragment : Fragment(), DateDialog.DateDialogListener, ArticlesA
     }
 
     override fun onItemClicked(article: Article?) {
-        val intent = Intent(activity, ArticleActivity::class.java)
-        intent.putExtra(ArticleActivity.ARGS_ARTICLE, article)
-        startActivity(intent)
-        CustomIntent.customType(activity, "fadein-to-fadeout")
+        mArticleViewModel?.articleClicked(article)
     }
 
     override fun onFavoriteButtonClicked(article: Article?) {

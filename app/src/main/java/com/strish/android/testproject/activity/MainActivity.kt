@@ -1,19 +1,22 @@
 package com.strish.android.testproject.activity
 
+import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
+import android.os.Bundle
 import android.support.design.widget.TabLayout
-import android.support.v7.app.AppCompatActivity
-
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import android.os.Bundle
-import com.strish.android.testproject.fragments.AllArticlesFragment
+import android.support.v7.app.AppCompatActivity
+import com.strish.android.testproject.Article
 import com.strish.android.testproject.ArticleViewModel
-import com.strish.android.testproject.fragments.FavoritesFragment
 import com.strish.android.testproject.R
-
+import com.strish.android.testproject.fragments.AllArticlesFragment
+import com.strish.android.testproject.fragments.FavoritesFragment
 import kotlinx.android.synthetic.main.activity_main.*
+import maes.tech.intentanim.CustomIntent
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,6 +29,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         mArticleViewModel = ViewModelProviders.of(this).get(ArticleViewModel::class.java)
+        mArticleViewModel?.openActivityLiveData = MutableLiveData()
+        mArticleViewModel?.openActivityLiveData?.observe(this, Observer<Article> { article ->
+            openArticleActivity(article)
+        })
 
         setSupportActionBar(toolbar)
         mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
@@ -40,16 +47,23 @@ class MainActivity : AppCompatActivity() {
     inner class SectionsPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
         override fun getItem(position: Int): Fragment {
-            if(position == 0){
+            if (position == 0) {
                 return AllArticlesFragment().newInstance()
-            } else{
-                return  FavoritesFragment().newInstance()
+            } else {
+                return FavoritesFragment().newInstance()
             }
         }
 
         override fun getCount(): Int {
             return 2
         }
+    }
+
+    private fun openArticleActivity(article: Article?) {
+        val intent = Intent(this, ArticleActivity::class.java)
+        intent.putExtra(ArticleActivity.ARGS_ARTICLE, article)
+        startActivity(intent)
+        CustomIntent.customType(this, "fadein-to-fadeout")
     }
 
 }
