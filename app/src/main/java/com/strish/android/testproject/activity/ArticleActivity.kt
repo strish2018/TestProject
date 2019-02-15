@@ -6,17 +6,17 @@ import android.net.ConnectivityManager
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
-import android.widget.ImageView
-import android.widget.TextView
-
 import com.squareup.picasso.Picasso
 import com.strish.android.testproject.Article
 import com.strish.android.testproject.R
 import kotlinx.android.synthetic.main.article_layout.*
-
 import maes.tech.intentanim.CustomIntent
 
 class ArticleActivity : AppCompatActivity() {
+    /*
+     * Better use synthetic instead of findViewById
+     */
+
     private val isNetworkAvailableAndConnected: Boolean
         get() {
             val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

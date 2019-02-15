@@ -55,6 +55,10 @@ class FavoritesAdapter : ListAdapter<Article, FavoritesAdapter.ArticlesViewHolde
     }
 
     class ArticlesViewHolder(itemView: View, listener: OnItemClickedListener?) : RecyclerView.ViewHolder(itemView) {
+        /*
+        * findViewById can be replaced with kotlin synthetic
+        */
+
         var mImageView: ImageView = itemView.findViewById(R.id.image_view_list)
         var mTitleTextView: TextView = itemView.findViewById(R.id.list_item_title_text_view)
         var mBylineTextView: TextView = itemView.findViewById(R.id.list_item_byline_text_view)

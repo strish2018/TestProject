@@ -53,6 +53,9 @@ class ArticlesAdapter(private var mArticles: List<Article>?) : RecyclerView.Adap
 
 
     class ArticlesViewHolder(itemView: View, listener: OnItemClickedListener?) : RecyclerView.ViewHolder(itemView) {
+        /*
+        * findViewById can be replaced with kotlin synthetic
+        */
         private var mImageView: ImageView = itemView.findViewById(R.id.image_view_list)
         private var mTitleTextView: TextView = itemView.findViewById(R.id.list_item_title_text_view)
         private var mBylineTextView: TextView = itemView.findViewById(R.id.list_item_byline_text_view)

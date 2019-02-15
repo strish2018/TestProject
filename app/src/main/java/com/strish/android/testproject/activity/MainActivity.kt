@@ -19,6 +19,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 import maes.tech.intentanim.CustomIntent
 
 class MainActivity : AppCompatActivity() {
+    /*
+     * Better use synthetic instead of findViewById
+     */
 
     private var mSectionsPagerAdapter: SectionsPagerAdapter? = null
 
