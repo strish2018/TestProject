@@ -12,18 +12,11 @@ import android.widget.TextView
 import com.squareup.picasso.Picasso
 import com.strish.android.testproject.Article
 import com.strish.android.testproject.R
+import kotlinx.android.synthetic.main.article_layout.*
 
 import maes.tech.intentanim.CustomIntent
 
 class ArticleActivity : AppCompatActivity() {
-
-    private var mArticle: Article? = null
-    private var mImageView: ImageView? = null
-    private var mTitleTextView: TextView? = null
-    private var mBylineTextView: TextView? = null
-    private var mAbstractTextView: TextView? = null
-    private var mDateTextView: TextView? = null
-
     private val isNetworkAvailableAndConnected: Boolean
         get() {
             val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -34,24 +27,19 @@ class ArticleActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.article_layout)
-        mImageView = findViewById(R.id.image_view_item)
-        mTitleTextView = findViewById(R.id.item_title_text_view)
-        mBylineTextView = findViewById(R.id.item_byline_text_view)
-        mAbstractTextView = findViewById(R.id.item_abstract_text_view)
-        mDateTextView = findViewById(R.id.item_date_text_view)
+        //U only need a local var
+        val article = intent.getSerializableExtra(ARGS_ARTICLE) as Article
 
-        mArticle = intent.getSerializableExtra(ARGS_ARTICLE) as Article
-
-        mTitleTextView!!.text = mArticle!!.title
-        mBylineTextView!!.text = mArticle!!.author
-        mAbstractTextView!!.text = mArticle!!.content
-        mDateTextView!!.text = mArticle!!.publishedAt!!.substring(0, 10)
+        item_title_text_view.text = article.title
+        item_byline_text_view.text = article.author
+        item_abstract_text_view.text = article.content
+        item_date_text_view.text = article.publishedAt?.substring(0, 10)
         if (isNetworkAvailableAndConnected) {
-            Picasso.get().load(mArticle!!.urlToImage).fit().centerCrop().into(mImageView)
+            Picasso.get().load(article.urlToImage).fit().centerCrop().into(image_view_item)
         } else {
-            val data = mArticle!!.thumbnailByte
-            val bmp = BitmapFactory.decodeByteArray(data, 0, data!!.size)
-            mImageView!!.setImageBitmap(bmp)
+            val data = article.thumbnailByte
+            val bmp = BitmapFactory.decodeByteArray(data, 0, data?.size ?: 0)
+            image_view_item.setImageBitmap(bmp)
         }
     }
 
@@ -72,7 +60,6 @@ class ArticleActivity : AppCompatActivity() {
     }
 
     companion object {
-
-        val ARGS_ARTICLE = "article"
+        const val ARGS_ARTICLE = "article"
     }
 }

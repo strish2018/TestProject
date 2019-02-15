@@ -31,45 +31,6 @@ class FavoritesAdapter : ListAdapter<Article, FavoritesAdapter.ArticlesViewHolde
         mListener = listener
     }
 
-    class ArticlesViewHolder(itemView: View, listener: OnItemClickedListener?) : RecyclerView.ViewHolder(itemView) {
-        var mImageView: ImageView
-        var mTitleTextView: TextView
-        var mBylineTextView: TextView
-        var mFavoriteButton: ImageButton
-        var mShareButton: ImageButton
-        private var mArticle: Article? = null
-
-        init {
-            mImageView = itemView.findViewById(R.id.image_view_list)
-            mTitleTextView = itemView.findViewById(R.id.list_item_title_text_view)
-            mBylineTextView = itemView.findViewById(R.id.list_item_byline_text_view)
-            mFavoriteButton = itemView.findViewById(R.id.list_item_favorites_button)
-            mShareButton = itemView.findViewById(R.id.list_item_share_button)
-
-            mFavoriteButton.setImageResource(R.drawable.ic_favorite_on)
-
-            itemView.setOnClickListener {
-                listener?.onItemClicked(mArticle)
-            }
-
-            mFavoriteButton.setOnClickListener {
-                listener?.onFavoriteButtonClicked(mArticle)
-            }
-
-            mShareButton.setOnClickListener {
-                listener?.onShareClicked(mArticle)
-            }
-        }
-
-        fun bindArticle(article: Article) {
-            mArticle = article
-            Picasso.get().load(mArticle!!.urlToImage).fit().centerCrop().into(mImageView)
-            mTitleTextView.text = mArticle!!.title
-            mBylineTextView.text = mArticle!!.author
-        }
-
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticlesViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.list_item, parent, false)
         return ArticlesViewHolder(v, mListener)
@@ -91,6 +52,42 @@ class FavoritesAdapter : ListAdapter<Article, FavoritesAdapter.ArticlesViewHolde
                 return true
             }
         }
+    }
+
+    class ArticlesViewHolder(itemView: View, listener: OnItemClickedListener?) : RecyclerView.ViewHolder(itemView) {
+        var mImageView: ImageView = itemView.findViewById(R.id.image_view_list)
+        var mTitleTextView: TextView = itemView.findViewById(R.id.list_item_title_text_view)
+        var mBylineTextView: TextView = itemView.findViewById(R.id.list_item_byline_text_view)
+        var mFavoriteButton: ImageButton = itemView.findViewById(R.id.list_item_favorites_button)
+        var mShareButton: ImageButton = itemView.findViewById(R.id.list_item_share_button)
+
+        //Not the best move, but ok
+        private var mArticle: Article? = null
+
+        init {
+
+            mFavoriteButton.setImageResource(R.drawable.ic_favorite_on)
+
+            itemView.setOnClickListener {
+                listener?.onItemClicked(mArticle)
+            }
+
+            mFavoriteButton.setOnClickListener {
+                listener?.onFavoriteButtonClicked(mArticle)
+            }
+
+            mShareButton.setOnClickListener {
+                listener?.onShareClicked(mArticle)
+            }
+        }
+
+        fun bindArticle(article: Article) {
+            mArticle = article
+            Picasso.get().load(article.urlToImage).fit().centerCrop().into(mImageView)
+            mTitleTextView.text = article.title
+            mBylineTextView.text = article.author
+        }
+
     }
 
 }

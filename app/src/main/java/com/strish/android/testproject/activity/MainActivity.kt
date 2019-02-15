@@ -47,10 +47,10 @@ class MainActivity : AppCompatActivity() {
     inner class SectionsPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
         override fun getItem(position: Int): Fragment {
-            if (position == 0) {
-                return AllArticlesFragment().newInstance()
+            return if (position == 0) {
+                AllArticlesFragment().newInstance()
             } else {
-                return FavoritesFragment().newInstance()
+                FavoritesFragment().newInstance()
             }
         }
 
@@ -66,4 +66,8 @@ class MainActivity : AppCompatActivity() {
         CustomIntent.customType(this, "fadein-to-fadeout")
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        mArticleViewModel?.onDestroy()
+    }
 }

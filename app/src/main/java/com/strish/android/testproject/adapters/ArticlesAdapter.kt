@@ -32,57 +32,6 @@ class ArticlesAdapter(private var mArticles: List<Article>?) : RecyclerView.Adap
         mListener = listener
     }
 
-    class ArticlesViewHolder(itemView: View, listener: OnItemClickedListener?) : RecyclerView.ViewHolder(itemView) {
-        var mImageView: ImageView
-        var mTitleTextView: TextView
-        var mBylineTextView: TextView
-        var mFavoriteButton: ImageButton
-        var mShareButton: ImageButton
-        private var mArticle: Article? = null
-
-        init {
-            mImageView = itemView.findViewById(R.id.image_view_list)
-            mTitleTextView = itemView.findViewById(R.id.list_item_title_text_view)
-            mBylineTextView = itemView.findViewById(R.id.list_item_byline_text_view)
-            mFavoriteButton = itemView.findViewById(R.id.list_item_favorites_button)
-            mShareButton = itemView.findViewById(R.id.list_item_share_button)
-
-            itemView.setOnClickListener {
-                listener?.onItemClicked(mArticle)
-            }
-
-            mFavoriteButton.setOnClickListener {
-                if (listener != null) {
-                    val bitmap = (mImageView.drawable as BitmapDrawable).bitmap
-                    val baos = ByteArrayOutputStream()
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-                    val imageInByte = baos.toByteArray()
-                    mArticle!!.thumbnailByte = imageInByte
-                    listener.onFavoriteButtonClicked(mArticle)
-                    mFavoriteButton.setImageResource(R.drawable.ic_favorite_on)
-                }
-            }
-
-            mShareButton.setOnClickListener {
-                listener?.onShareClicked(mArticle)
-            }
-
-        }
-
-        fun bindArticle(article: Article) {
-            mArticle = article
-            Picasso.get().load(mArticle!!.urlToImage).fit().centerCrop().into(mImageView)
-            mTitleTextView.text = mArticle!!.title
-            mBylineTextView.text = mArticle!!.author
-            if (mArticle!!.favorite) {
-                mFavoriteButton.setImageResource(R.drawable.ic_favorite_on)
-            } else {
-                mFavoriteButton.setImageResource(R.drawable.ic_favorite_off)
-            }
-        }
-
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticlesViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.list_item, parent, false)
         return ArticlesViewHolder(v, mListener)
@@ -100,6 +49,53 @@ class ArticlesAdapter(private var mArticles: List<Article>?) : RecyclerView.Adap
     fun setArticles(articles: List<Article>) {
         mArticles = articles
         notifyDataSetChanged()
+    }
+
+
+    class ArticlesViewHolder(itemView: View, listener: OnItemClickedListener?) : RecyclerView.ViewHolder(itemView) {
+        private var mImageView: ImageView = itemView.findViewById(R.id.image_view_list)
+        private var mTitleTextView: TextView = itemView.findViewById(R.id.list_item_title_text_view)
+        private var mBylineTextView: TextView = itemView.findViewById(R.id.list_item_byline_text_view)
+        private var mFavoriteButton: ImageButton = itemView.findViewById(R.id.list_item_favorites_button)
+        private var mShareButton: ImageButton = itemView.findViewById(R.id.list_item_share_button)
+
+        private var mArticle: Article? = null
+
+        init {
+            itemView.setOnClickListener {
+                listener?.onItemClicked(mArticle)
+            }
+
+            mFavoriteButton.setOnClickListener {
+                if (listener != null) {
+                    val bitmap = (mImageView.drawable as BitmapDrawable).bitmap
+                    val baos = ByteArrayOutputStream()
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+                    val imageInByte = baos.toByteArray()
+                    mArticle?.thumbnailByte = imageInByte
+                    listener.onFavoriteButtonClicked(mArticle)
+                    mFavoriteButton.setImageResource(R.drawable.ic_favorite_on)
+                }
+            }
+
+            mShareButton.setOnClickListener {
+                listener?.onShareClicked(mArticle)
+            }
+        }
+
+        fun bindArticle(article: Article) {
+            mArticle = article
+            Picasso.get().load(article.urlToImage).fit().centerCrop().into(mImageView)
+            mTitleTextView.text = article.title
+            mBylineTextView.text = article.author
+
+            if (article.favorite) {
+                mFavoriteButton.setImageResource(R.drawable.ic_favorite_on)
+            } else {
+                mFavoriteButton.setImageResource(R.drawable.ic_favorite_off)
+            }
+        }
+
     }
 
 }

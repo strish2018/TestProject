@@ -5,12 +5,15 @@ import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import com.strish.android.testproject.api.NewsApiService
+import com.strish.android.testproject.utils.bind
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.text.SimpleDateFormat
 import java.util.*
 
 class ArticleViewModel(application: Application) : AndroidViewModel(application) {
+    private val compositeDisposable = CompositeDisposable()
 
     var resetAdapter: Boolean = false
     private var sortByPopularity: Boolean = true
@@ -24,7 +27,7 @@ class ArticleViewModel(application: Application) : AndroidViewModel(application)
     var dateTo: Date = Date()
         private set
 
-    private val sdf = SimpleDateFormat("yyyy-MM-dd")
+    private val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 
     var articles: MutableLiveData<List<Article>>? = MutableLiveData()
         internal set
@@ -53,12 +56,12 @@ class ArticleViewModel(application: Application) : AndroidViewModel(application)
 
     private fun fetchNewArticles(pageNum: Int) {
         val apiService = NewsApiService.create()
-        val sortBy: String
-        if (sortByPopularity) {
-            sortBy = "popularity"
+        val sortBy: String = if (sortByPopularity) {
+            "popularity"
         } else {
-            sortBy = "publishedAt"
+            "publishedAt"
         }
+
         apiService.newArticles(pageNum, sortBy, sdf.format(dateFrom), sdf.format(dateTo))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -78,14 +81,15 @@ class ArticleViewModel(application: Application) : AndroidViewModel(application)
                     error.printStackTrace()
                     val list: List<Article> = emptyList()
                     articles?.postValue(list)
-                })
+                }).bind(compositeDisposable)
     }
 
     private fun checkArticles(articles: List<Article>) {
         val favorites: List<Article> = repository.allArticles.value!!
         for (art in articles) {
             for (fav in favorites) {
-                if (art.title.equals(fav.title)) {
+                //equals can be replaced with == in Kotlin
+                if (art.title == fav.title) {
                     art.favorite = true
                 }
             }
@@ -117,18 +121,30 @@ class ArticleViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun favoriteButtonClicked(article: Article?) {
-        if (article?.favorite == true) {
+        //With this check we can avoid a lot of null-checking
+        if (article == null) return
+
+        if (article.favorite) {
             article.favorite = false
             deleteByTitle(article.title)
-            for (art in articles?.value!!.asIterable()) {
-                if (art.title.equals(article.title)) {
-                    art.favorite = false
-                }
-            }
-            mlistener?.onListUpdated(articles?.value!!)
+
+
+//            for (art in articles?.value!!.asIterable()) {
+//                if (art.title == article.title) {
+//                    art.favorite = false
+//                }
+//            }
+//            This could be replaced by the next one line
+//            And btw, u should not search by title 'cause they can repeat sometimes
+//            Better search and delete by id
+
+            articles?.value?.first { it.title == article.title }?.favorite = false
+
+//            Be careful with not-null assertion operator. Better do like this
+            articles?.value?.run { mlistener?.onListUpdated(this) }
         } else {
-            article?.favorite = true
-            saveArticle(article!!)
+            article.favorite = true
+            saveArticle(article)
         }
     }
 
@@ -140,4 +156,8 @@ class ArticleViewModel(application: Application) : AndroidViewModel(application)
         repository.deleteByTitle(title)
     }
 
+    fun onDestroy(){
+        //Use composite disposable if u have any rx calls
+        compositeDisposable.dispose()
+    }
 }

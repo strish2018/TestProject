@@ -40,10 +40,4 @@ abstract class EndlessRecyclerOnScrollListener(private val mLinearLayoutManager:
     }
 
     abstract fun onLoadMore(current_page: Int)
-
-    companion object {
-
-        var TAG = "viewModel"
-    }
-
 }

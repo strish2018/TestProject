@@ -134,4 +134,9 @@ class AllArticlesFragment : Fragment(), DateDialog.DateDialogListener, ArticlesA
     override fun onListUpdated(articles: List<Article>) {
         mAdapter?.setArticles(articles)
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mArticleViewModel?.onDestroy()
+    }
 }

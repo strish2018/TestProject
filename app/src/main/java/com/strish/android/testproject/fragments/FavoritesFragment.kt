@@ -61,4 +61,9 @@ class FavoritesFragment : Fragment(), FavoritesAdapter.OnItemClickedListener {
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Check this out: " + article?.url)
         startActivity(Intent.createChooser(sharingIntent, "Share using"))
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mArticleViewModel?.onDestroy()
+    }
 }
